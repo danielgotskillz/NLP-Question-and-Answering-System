@@ -1,5 +1,5 @@
-Name: Daniel Ogunyankin
-Matric Number: 123456
+Name: Ogunyankin Daniel
+Matric Number: 22CG031906
 Live URL: https://ogunyankindaniel-22cg031906-nlp-question.onrender.com/
 GitHub Repo: https://github.com/danielgotskillz/NLP-Question-and-Answering-System.git
 
