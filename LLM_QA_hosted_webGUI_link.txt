@@ -1,4 +1,5 @@
 Name: Daniel Ogunyankin
 Matric Number: 123456
-Live URL: (paste Render link after deployment)
-GitHub Repo: (paste GitHub repo link)
+Live URL: https://ogunyankindaniel-22cg031906-nlp-question.onrender.com/
+GitHub Repo: https://github.com/danielgotskillz/NLP-Question-and-Answering-System.git
+
