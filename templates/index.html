@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM Q&A Web GUI</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>LLM Q&A</h1>
+    <form id="qform">
+      <label for="question">Enter your question:</label>
+      <textarea id="question" name="question" rows="3" placeholder="e.g. What causes rain?"></textarea>
+      <button type="submit">Ask</button>
+    </form>
+
+    <section id="results" style="display:none;">
+      <h2>Results</h2>
+      <p><strong>Original question:</strong> <span id="orig"></span></p>
+      <p><strong>Processed question:</strong> <span id="proc"></span></p>
+      <p><strong>Prompt sent to LLM:</strong></p>
+      <pre id="prompt"></pre>
+      <p><strong>Answer:</strong></p>
+      <pre id="answer"></pre>
+      <p id="error" class="error"></p>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('qform')
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const q = document.getElementById('question').value
+      document.getElementById('orig').textContent = q
+      document.getElementById('proc').textContent = ''
+      document.getElementById('prompt').textContent = ''
+      document.getElementById('answer').textContent = ''
+      document.getElementById('error').textContent = ''
+      document.getElementById('results').style.display = 'block'
+
+      try {
+        const res = await fetch('/ask', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: q })
+        })
+
+        const data = await res.json()
+        if (!res.ok) {
+          document.getElementById('error').textContent = data.error || JSON.stringify(data)
+          return
+        }
+
+        document.getElementById('proc').textContent = data.processed_question
+        document.getElementById('prompt').textContent = data.prompt
+        document.getElementById('answer').textContent = data.answer
+
+      } catch (err) {
+        document.getElementById('error').textContent = err.toString()
+      }
+    })
+  </script>
+</body>
+</html>
