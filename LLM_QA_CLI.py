@@ -2,7 +2,7 @@ import google.generativeai as genai
 import re
 
 # Configure Gemini API Key
-genai.configure(api_key="YOUR_GEMINI_API_KEY")
+genai.configure(api_key="AIzaSyCg4AmnKeXAUHFGzoYh6WQ3Q-KnnrJbh84")
 
 def preprocess(question):
     question = question.lower()
