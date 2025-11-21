@@ -1,39 +1,27 @@
-import os
-import re
 from flask import Flask, render_template, request
-from openai import OpenAI
+import google.generativeai as genai
+import re
 
 app = Flask(__name__)
+genai.configure(api_key="YOUR_GEMINI_API_KEY")
 
-client = OpenAI()
-
-def preprocess_text(text):
-    text = text.lower()
-    text = re.sub(r"[^\w\s]", "", text)
-    tokens = text.split()
+def preprocess(question):
+    question = question.lower()
+    question = re.sub(r'[^a-z0-9\s]', '', question)
+    tokens = question.split()
     return " ".join(tokens)
 
 @app.route("/", methods=["GET", "POST"])
-def index():
+def home():
     processed = ""
     answer = ""
-
     if request.method == "POST":
-        question = request.form.get("question")
-
-        processed = preprocess_text(question)
-
-        response = client.chat.completions.create(
-            model=os.getenv("OPENAI_MODEL", "gpt-3.5-turbo"),
-            messages=[
-                {"role": "system", "content": "You are a helpful question-answering assistant."},
-                {"role": "user", "content": processed}
-            ]
-        )
-
-        answer = response.choices[0].message["content"]
-
+        question = request.form["question"]
+        processed = preprocess(question)
+        model = genai.GenerativeModel("gemini-pro")
+        response = model.generate_content(question)
+        answer = response.text
     return render_template("index.html", processed=processed, answer=answer)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(port=5000)

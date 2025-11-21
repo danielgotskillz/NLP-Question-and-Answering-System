@@ -1,35 +1,26 @@
-import os
+import google.generativeai as genai
 import re
-from openai import OpenAI
 
-# Initialize OpenAI client
-client = OpenAI()
+# Configure Gemini API Key
+genai.configure(api_key="YOUR_GEMINI_API_KEY")
 
-def preprocess_text(text):
-    text = text.lower()
-    text = re.sub(r"[^\w\s]", "", text)
-    tokens = text.split()
+def preprocess(question):
+    question = question.lower()
+    question = re.sub(r'[^a-z0-9\s]', '', question)
+    tokens = question.split()
     return " ".join(tokens)
 
 def ask_llm(question):
-    processed = preprocess_text(question)
-
-    response = client.chat.completions.create(
-        model=os.getenv("OPENAI_MODEL", "gpt-3.5-turbo"),
-        messages=[
-            {"role": "system", "content": "You are a helpful question-answering assistant."},
-            {"role": "user", "content": processed}
-        ]
-    )
-    
-    return response.choices[0].message["content"]
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content(question)
+    return response.text
 
 if __name__ == "__main__":
-    print("=== LLM Q&A CLI ===")
     while True:
-        user_input = input("Enter your question (or 'quit'): ")
-        if user_input.lower() == "quit":
+        user_q = input("Enter your question (or 'quit'): ")
+        if user_q.lower() == "quit":
             break
-
-        answer = ask_llm(user_input)
-        print("\nAnswer:", answer, "\n")
+        processed = preprocess(user_q)
+        print("Processed Question:", processed)
+        answer = ask_llm(user_q)
+        print("Answer:", answer)

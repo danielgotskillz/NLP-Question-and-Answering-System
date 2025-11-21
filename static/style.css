@@ -1,6 +1,0 @@
-body { font-family: Arial, sans-serif; background:#f2f4f8; color:#111; }
-.container { max-width:800px; margin:40px auto; background:white; padding:20px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.06); }
-textarea { width:100%; padding:8px; font-size:1rem; }
-button { padding:8px 14px; margin-top:8px; }
-pre { background:#f6f8fa; padding:12px; border-radius:6px; overflow:auto }
-.error { color: darkred; }
